@@ -12,11 +12,13 @@ namespace FnacDarty.TechnicalTest.Library.Controllers
     {
         private readonly ILibraryService _bookService;
         private readonly ICustomerService _customerService;
-
-        public LibraryController(ILibraryService bookService, ICustomerService customerService)
+        //TODO : Configuer le logger 
+        private readonly ILogger<LibraryController> _logger;
+        public LibraryController(ILibraryService bookService, ICustomerService customerService, ILogger<LibraryController> logger)
         {
             _bookService = bookService;
             _customerService = customerService;
+            _logger = logger;
         }
 
         [HttpGet("getAllBooks")]
@@ -50,6 +52,7 @@ namespace FnacDarty.TechnicalTest.Library.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Une erreur inattendue est survenue");
                 return BadRequest("Une erreur inattendue est survenue, veuillez réessayer ultérieurement.");
             }
 
