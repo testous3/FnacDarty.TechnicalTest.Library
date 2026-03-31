@@ -13,14 +13,14 @@ namespace FnacDarty.TechnicalTest.Library.Application.Services
         {
             _loanRepository = loanRepository;
         }
-        public Loan AddLoan(int customerId, int bookId)
+        public void AddLoan(int customerId, int bookId)
         {
             var currentDate = DateTime.Now;
             var allLoans = _loanRepository.Get();
             var id = allLoans.Count == 0 ? 1 : allLoans.Max(b => b.Id) + 1;
             var loan = new Loan(0, customerId, bookId, currentDate, currentDate.AddDays(21), null);
             _loanRepository.AddLoan(loan);
-            return loan;
+
         }
 
         public List<Loan> GetAllActiveLoans()

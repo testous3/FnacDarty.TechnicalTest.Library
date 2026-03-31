@@ -7,7 +7,7 @@ namespace FnacDarty.TechnicalTest.Library.Domain.Interfaces
 {
     public interface ILoanService
     {
-        Loan AddLoan(int customerId, int bookId);
+        void AddLoan(int customerId, int bookId);
         List<Loan> GetAllActiveLoans();
 
     }

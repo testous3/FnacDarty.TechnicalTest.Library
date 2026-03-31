@@ -47,7 +47,7 @@ namespace FnacDarty.TechnicalTest.Library.Domain.Services
 
             var overDueBooks = bookIds.Where(b => currentLoansWithOverDueDate.Select(c => c.BookId).Contains(b)).ToList();
 
-            var restBooks = bookIds.Except(notFoundBooks).Except(notAvailableBooks).ToList();
+            var restBooks = bookIds.Except(notFoundBooks).Except(notAvailableBooks).Except(overDueBooks).ToList();
 
 
             foreach (var notFound in notFoundBooks)
@@ -68,14 +68,15 @@ namespace FnacDarty.TechnicalTest.Library.Domain.Services
 
             for (int i = 0; i < restBooks.Count; i++)
             {
-                if (restBooks.Count >= 3)
+                if (restBooks.Count > 3)
                 {
-                    break;
+                    borrowResult.RejectedBooks.Add(new RejectedBooksModel() { BookId = restBooks[i], ReasonCode = "LIMIT_REACHED", reasonLabel = "Le client a atteint la limite de 3 emprunts simultanés" });
+
                 }
                 else
                 {
-                    var loan = _loanService.AddLoan(customerId, restBooks[i]);
-                    borrowResult.BorrowedBooks.Add(new BorrowedBooksModel() { BookId = restBooks[i], DueAt = loan.DueAt });
+                    _loanService.AddLoan(customerId, restBooks[i]);
+                    borrowResult.BorrowedBooks.Add(new BorrowedBooksModel() { BookId = restBooks[i], DueAt = DateTime.Now.AddDays(21) });
                 }
             }
 
