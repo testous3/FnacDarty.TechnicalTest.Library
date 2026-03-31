@@ -1,3 +1,4 @@
+using FnacDarty.TechnicalTest.Library.Application.Services;
 using FnacDarty.TechnicalTest.Library.Domain.Interfaces;
 using FnacDarty.TechnicalTest.Library.Domain.Services;
 using FnacDarty.TechnicalTest.Library.Infrastructure.Repositories;
@@ -35,6 +36,12 @@ await app.RunAsync();
 
 void ConfigureServices(IServiceCollection services)
 {
-    services.AddScoped<IBookRepository, BookRepository>();
+    services.AddSingleton<IBookRepository, BookRepository>();
+    services.AddSingleton<ICustomerRepository, CustomerRepository>();
+    services.AddSingleton<ILoanRepository, LoanRepository>();
+
+
     services.AddScoped<ILibraryService, LibraryService>();
+    services.AddScoped<ICustomerService, CustomerService>();
+    services.AddScoped<ILoanService, LoanService>();
 }
