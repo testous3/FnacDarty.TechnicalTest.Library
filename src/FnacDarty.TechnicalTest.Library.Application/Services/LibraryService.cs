@@ -68,7 +68,7 @@ namespace FnacDarty.TechnicalTest.Library.Domain.Services
 
             for (int i = 0; i < restBooks.Count; i++)
             {
-                if (restBooks.Count > 3)
+                if (i >= 3)
                 {
                     borrowResult.RejectedBooks.Add(new RejectedBooksModel() { BookId = restBooks[i], ReasonCode = "LIMIT_REACHED", reasonLabel = "Le client a atteint la limite de 3 emprunts simultanés" });
 
@@ -80,11 +80,7 @@ namespace FnacDarty.TechnicalTest.Library.Domain.Services
                 }
             }
 
-            if (restBooks.Count > 3)
-            {
-                borrowResult.RejectedBooks.Add(new RejectedBooksModel() { ReasonCode = "LIMIT_REACHED  ", reasonLabel = "Le livre n'est pas disponible actuellement" });
 
-            }
 
 
             return borrowResult;

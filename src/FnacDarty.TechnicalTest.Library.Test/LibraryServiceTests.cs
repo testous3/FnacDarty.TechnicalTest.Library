@@ -145,5 +145,45 @@ namespace FnacDarty.TechnicalTest.Library.Test
             Assert.Equal(result.BorrowedBooks.Count, 3);
 
         }
+
+
+        [Fact]
+        public void Borrow_Should_Borrow_When_Books_Are_Available_AND_GREAT3()
+        {
+
+            var bookRepoMock = new Mock<IBookRepository>();
+            var loanServiceMock = new Mock<ILoanService>();
+            var customerServiceMock = new Mock<ICustomerService>();
+            var customerId = 1;
+
+
+            bookRepoMock
+                .Setup(x => x.GetAll())
+                .Returns(new List<Book>() {
+
+                    new Book(10, string.Empty, string.Empty),
+                    new Book(11, string.Empty, string.Empty),
+                    new Book(12, string.Empty, string.Empty),
+                    new Book(13, string.Empty, string.Empty),
+                });
+
+            loanServiceMock
+                .Setup(x => x.GetAllActiveLoans())
+                .Returns(new List<Loan>() { });
+
+            var service = new LibraryService(
+                bookRepoMock.Object,
+                customerServiceMock.Object,
+                loanServiceMock.Object
+            );
+
+            var result = service.BorrowBooks(customerId, new List<int> { 10, 11, 12, 13 });
+            Assert.NotEmpty(result.RejectedBooks);
+            Assert.NotEmpty(result.BorrowedBooks);
+            Assert.Equal(result.BorrowedBooks.Count, 3);
+            Assert.Equal(result.RejectedBooks.Count, 1);
+            Assert.Equal(result.RejectedBooks.Single().ReasonCode, "LIMIT_REACHED");
+
+        }
     }
 }
